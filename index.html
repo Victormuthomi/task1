@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 1</title>
+</head>
+<body>
+    <div id="output"></div>
+   <button id="getCountry">Get Country</button>
+   <button id="sortCountries">Sort Countries-ascending</button>
+   <button id="countriesSort">Sort Countries-descending</button>
+   <button id="bCountries">B Countries</button>
+   <button id="kenya">Kenya</button>
+   <script>
+       document.getElementById('getCountry')
+           .addEventListener('click', getCountry);
+       document.getElementById('sortCountries')
+           .addEventListener('click', sortCountries);
+       document.getElementById('countriesSort')
+       .addEventListener('click', countriesSort);
+       document.getElementById('bCountries')
+       .addEventListener('click', bCountries);
+       document.getElementById('kenya')
+       .addEventListener('click', kenya);
+       //first fetch the countries and store then in an arrary
+       function getCountry(){
+           fetch('https://restcountries.com/v3.1/all') //First fetch the data from the API
+               .then((res) => res.json()) // the format of the data is json
+               .then((data) => {          //get the data from the API
+                   let output ='<h1>Countries</h1>';   //Display the name at the top of the page
+                   const countries = data.map(country => country.name.common)  //Create an countries array containig the country names
+                       data.forEach(function(country){  //Loop through the data and store each country name individually
+                           output +=`
+                           <h2>${country.name.common}</h2>
+                           `;
+                       })
+                       document.getElementById('getCountry').innerHTML = output;
+               })
+       }
+
+       //sort the countries by name in ascending order
+       function sortCountries() { //crreate a function 
+           fetch('https://restcountries.com/v3.1/all')  //fetch the data from the Api
+               .then((res) => res.json())               //response should be json format
+               .then((data) => {                         //get the data from the api
+                   const sortedCountries = data.map(country => country.name.common).sort()   //first create an array then sort it by default its ascending order
+                   let output = '<h1>Sorted Countriesi Ascending</h1>';       //the outout at the top of the page
+                   sortedCountries.forEach(function(country) {               //loop through the sorted countries 
+                       output += `
+                       <h2>${country}</h2>
+                       `;                                                     //output the country looped from the sorted countries
+                   })
+                   document.getElementById('sortCountries').innerHTML = output;    // show the output on the page
+               })
+       }
+       //sort the companies in a descending order
+       function countriesSort(){                                              //much like the sortCountries only that am sorting this in descending order 
+           fetch('https://restcountries.com/v3.1/all')                      
+               .then((res) => res.json())                                   
+               .then((data) => {                                              
+                   const countriesSorted = data.map(country => country.name.common)    
+                       .sort((a, b) => b.localeCompare(a))                             //NB: in stings we use localecompare to sort, in integers we use - sign you must also have 2 values to compare from eg (a,b) 
+                   let output = '<h1>sorted Countries Descending order</h2>';   
+                   countriesSorted.forEach(function(country) {
+                       output += `
+                       <h2>${country}</h2>
+                       `;
+                   })
+                   document.getElementById('countriesSort').innerHTML = output;
+               })
+       }
+
+       //filter the countries that start with an b
+       function bCountries() {
+           fetch('https://restcountries.com/v3.1/all')
+               .then((res) => res.json())
+               .then((data) =>  {
+                   const bCountries = data.map(country => country.name.common)
+                       .filter(name => name.startsWith('B'));                      //uses startsWith function to check if a the first letter is the one indicated
+                   let output = '<h1>Countries Starting With B</h1>';
+                   bCountries.forEach(function(country){
+                       output += `
+                       <h2>${country}</h2>
+                       `;
+                   })
+                   document.getElementById('bCountries').innerHTML = output;
+               })
+       }
+
+                //filter the country kenya
+       function kenya(){
+           fetch('https://restcountries.com/v3.1/all')
+               .then((res) => res.json())
+               .then((data) => {
+                   const kenya = data.map(country => country.name.common)
+                       .filter(name => name === 'Kenya');
+                   let output = '<h1>Kenya</h1>';
+                   kenya.forEach(function(country){
+                       output += `
+                       <h2>${country}</h2>
+                       `;
+                   })
+                   document.getElementById('kenya').innerHTML = output;
+               })
+       }
+   </script>
+</body>
+</html>
